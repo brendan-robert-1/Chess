@@ -1,0 +1,325 @@
+{
+  "pieceMap": [
+    [
+      {
+        "rank": 1,
+        "file": "f"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "BISHOP"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "c"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "f"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "c"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "BISHOP"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "a"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "d"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "QUEEN"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "c"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "e"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "h"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "ROOK"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "g"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "a"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "ROOK"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "h"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "ROOK"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "g"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "e"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "h"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "g"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "KNIGHT"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "b"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "g"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "KNIGHT"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "h"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "c"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "BISHOP"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "b"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 7,
+        "file": "d"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "a"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "a"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "ROOK"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "b"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "KNIGHT"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "e"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "KING"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "d"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "QUEEN"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "d"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 1,
+        "file": "e"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "KING"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "b"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "KNIGHT"
+      }
+    ],
+    [
+      {
+        "rank": 2,
+        "file": "f"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "PAWN"
+      }
+    ],
+    [
+      {
+        "rank": 8,
+        "file": "f"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "BISHOP"
+      }
+    ]
+  ]
+}
+

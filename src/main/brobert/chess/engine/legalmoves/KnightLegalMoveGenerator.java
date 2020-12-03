@@ -27,7 +27,7 @@ public class KnightLegalMoveGenerator implements LegalMoveGeneratorInterface{
                 if(pieceAtEnd != null && pieceAtEnd.getPieceColor().equals(friendlyColor)){
                     friendlyPieceAt = true;
                 }
-                if(!LegalMoveGenerator.putsSelfInCheck(move, board) && !friendlyPieceAt){
+                if(!LegalMoveGenerator.putsSelfInCheck(move, board, friendlyColor) && !friendlyPieceAt){
                     legalMoves.add(move);
                 }
             }

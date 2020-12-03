@@ -9,8 +9,7 @@ public class Main {
 
     public static void main(String[] args){
         BoardGenerator boardGenerator = new BoardGenerator();
-        Board board = boardGenerator.generateBoardFromPGN("KasparovTopalov.pgn");
-        ConsolePrinter.prettyPrintBoard(board);
+        Board board = boardGenerator.generateBoardFromPGN("KarpovKasparov.pgn");
     }
 
 }

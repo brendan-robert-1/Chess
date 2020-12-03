@@ -23,9 +23,9 @@ public class MoveExecutor {
         Coordinate rookEnd = getRookShortEndingCoordinate(pieceColor);
         Move kingMove = new Move(kingStart, kingEnd);
         Move rookMove = new Move(rookStart, rookEnd);
-        Board afterBoard = executeMove(kingMove, board);
-        afterBoard = executeMove(rookMove, board);
-        return afterBoard;
+        Board afterKing = executeMove(kingMove, board);
+        Board afterRook = executeMove(rookMove, afterKing);
+        return afterRook;
     }
 
     public Board castleLong(PieceColor pieceColor, Board board){
@@ -60,9 +60,9 @@ public class MoveExecutor {
     }
     private Coordinate getShortRookStartingCoordinate(PieceColor pieceColor) {
         if(pieceColor.equals(PieceColor.WHITE)){
-            return new Coordinate(BoardFile.g, 1);
+            return new Coordinate(BoardFile.h, 1);
         } else {
-            return new Coordinate(BoardFile.g, 8);
+            return new Coordinate(BoardFile.h, 8);
         }
     }
 

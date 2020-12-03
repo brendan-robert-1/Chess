@@ -6,6 +6,7 @@ import chess.engine.pgn.PGNGame;
 import chess.model.*;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Console;
 import java.io.IOException;
@@ -96,6 +97,9 @@ public class BoardGenerator {
             }
             else if(pgnMove.equals("O-O-O")){
                 board = moveExecutor.castleLong(pieceColor, board);
+            } else if(gameOver(pgnMove)){
+                printEndGame(pgnMove);
+                break;
             } else {
                 PieceType pieceType = determinePieceType(pgnMove);
                 Piece pieceToMove = new Piece(pieceColor, pieceType);
@@ -111,6 +115,28 @@ public class BoardGenerator {
             pieceColor = PieceColor.opposite(pieceColor);
         }
         return board;
+    }
+
+    private void printEndGame(String pgnMove){
+        if(pgnMove.equals("1-0")){
+            System.out.println("White wins!");
+        } else if(pgnMove.equals("0-1")){
+            System.out.println("Black wins!");
+        } else if(pgnMove.equals("1/2-1/2")) {
+            System.out.println("Draw!");
+        }
+    }
+
+
+    private boolean gameOver(String pgnMove) {
+        if(pgnMove.equals("1-0")){
+            return true;
+        } else if(pgnMove.equals("0-1")){
+            return true;
+        } else if(pgnMove.equals("1/2-1/2")){
+            return true;
+        }
+        return false;
     }
 
 
@@ -131,16 +157,50 @@ public class BoardGenerator {
         Map<Coordinate, Piece> pieceMap = board.getPieceMap();
         for(Coordinate coordinate : pieceMap.keySet()){
             Piece currentPiece = pieceMap.get(coordinate);
-            String ambiguousFile = "";
+            String ambiguousChar = "";
+            int ambiguousRank = 0;
             boolean isAmbiguousMove  = isAmbiguousMove(strippedPgnMove);
+            boolean isDoubleAmbiguous = false;
             if(isAmbiguousMove){
-                ambiguousFile = String.valueOf(strippedPgnMove.charAt(1));
-            }
-            if(currentPiece.getPieceType().equals(piece.getPieceType()) && currentPiece.getPieceColor().equals(piece.getPieceColor())){
-                if((isAmbiguousMove && coordinate.getFile().equals(BoardFile.boardFile(ambiguousFile)) || !isAmbiguousMove)) {
-                    if (LegalMoveGenerator.isLegalMove(new Move(coordinate, endingCoordinate), board)) {
-                        startingCoordinate = coordinate;
+                if(pgnMove.length() == 5){
+                    ambiguousChar = String.valueOf(strippedPgnMove.charAt(1));
+                    ambiguousRank = Integer.valueOf(strippedPgnMove.charAt(2));
+                    isDoubleAmbiguous = true;
+                }else {
+                    ambiguousChar = String.valueOf(strippedPgnMove.charAt(1));
+                    if(StringUtils.isNumeric(ambiguousChar)){
+                        ambiguousRank = Integer.valueOf(ambiguousChar);
                     }
+                }
+
+            }
+            boolean isFriendlyPiece = currentPiece.getPieceType().equals(piece.getPieceType()) && currentPiece.getPieceColor().equals(piece.getPieceColor());
+            boolean isStartingPiece = false;
+            if(isFriendlyPiece){
+                if(isAmbiguousMove){
+                    if(isDoubleAmbiguous){
+                       if(BoardFile.boardFile(ambiguousChar).equals(coordinate.getFile()) && ambiguousRank == coordinate.getRank()){
+                            isStartingPiece = true;
+                       }
+                    }else{
+                        if(ambiguousRank == 0){
+                            if(BoardFile.boardFile(ambiguousChar).equals(coordinate.getFile())){
+                                isStartingPiece = true;
+                            }
+                        }else{
+                            if(ambiguousRank == coordinate.getRank()){
+                                isStartingPiece = true;
+                            }
+                        }
+                    }
+                }else{
+                    isStartingPiece = true;
+                }
+            }
+            if(isStartingPiece){
+                if (LegalMoveGenerator.isLegalMove(new Move(coordinate, endingCoordinate), board)) {
+                    startingCoordinate = coordinate;
+                    break;
                 }
             }
         }

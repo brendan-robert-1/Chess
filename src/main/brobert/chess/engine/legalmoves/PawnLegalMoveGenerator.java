@@ -54,16 +54,15 @@ public class PawnLegalMoveGenerator implements LegalMoveGeneratorInterface {
         Coordinate rightCapture = getRightCaptureCoordinate(board, startingCoordinate);
         if(leftCapture != null){
             Move leftCaptureMove  = new Move(startingCoordinate, leftCapture);
-            if(!LegalMoveGenerator.putsSelfInCheck(leftCaptureMove, board) && capturablePiece(leftCapture, board, PieceColor.opposite(pieceColor))){
+            if(!LegalMoveGenerator.putsSelfInCheck(leftCaptureMove, board, pieceColor) && capturablePiece(leftCapture, board, PieceColor.opposite(pieceColor))){
                 captures.add(leftCaptureMove);
             }
         }
         if(rightCapture != null){
             Move rightCaptureMove  = new Move(startingCoordinate, rightCapture);
-            if(!LegalMoveGenerator.putsSelfInCheck(rightCaptureMove, board) && capturablePiece(rightCapture, board, PieceColor.opposite(pieceColor))){
+            if(!LegalMoveGenerator.putsSelfInCheck(rightCaptureMove, board, pieceColor) && capturablePiece(rightCapture, board, PieceColor.opposite(pieceColor))){
                 captures.add(rightCaptureMove);
             }
-
         }
         return captures;
     }

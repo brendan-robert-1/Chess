@@ -1,23 +1,42 @@
 package chess.engine.legalmoves;
 
 import chess.engine.Move;
+import chess.engine.MoveExecutor;
 import chess.engine.Offset;
-import chess.model.Board;
-import chess.model.Coordinate;
-import chess.model.Piece;
-import chess.model.PieceType;
+import chess.model.*;
+import com.google.common.collect.Maps;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LegalMoveGenerator {
+    static final KingLegalMoveGenerator kingLegalMoveGenerator = new KingLegalMoveGenerator();
+    static final PawnLegalMoveGenerator pawnLegalMoveGenerator = new PawnLegalMoveGenerator();
+    static final RookLegalMoveGenerator rookLegalMoveGenerator = new RookLegalMoveGenerator();
+    static final QueenLegalMoveGenerator queenLegalMoveGenerator = new QueenLegalMoveGenerator();
+    static final BishopLegalMoveGenerator bishopLegalMoveGenerator = new BishopLegalMoveGenerator();
+    static final KnightLegalMoveGenerator knightLegalMoveGenerator = new KnightLegalMoveGenerator();
+    static final MoveExecutor moveExecutor = new MoveExecutor();
 
     public static boolean isLegalMove(Move move, Board board){
         List<Move> legalMoves = generateLegalMoves(board, move.startingCoordinate);
         if(legalMoves.contains(move)){
             return true;
-        }else{
+        } else {
             return false;
         }
+    }
+
+    public static List<Move> generateLegalMovesFor(Board board, PieceColor pieceColor){
+        List<Move> allMoves = new ArrayList<>();
+        for(Coordinate coordinate : board.getPieceMap().keySet()){
+            Piece pieceAt = board.getPieceMap().get(coordinate);
+            if(pieceAt != null && pieceAt.getPieceColor().equals(pieceColor)){
+
+            }
+        }
+        return allMoves;
     }
 
     public static List<Move> generateLegalMoves(Board board, Coordinate startingCoordinate){
@@ -32,12 +51,12 @@ public class LegalMoveGenerator {
 
     private static LegalMoveGeneratorInterface generator(PieceType pieceType){
         switch(pieceType){
-            case KING: return new KingLegalMoveGenerator();
-            case PAWN: return new PawnLegalMoveGenerator();
-            case ROOK: return new RookLegalMoveGenerator();
-            case QUEEN: return new QueenLegalMoveGenerator();
-            case BISHOP: return new BishopLegalMoveGenerator();
-            case KNIGHT: return new KnightLegalMoveGenerator();
+            case KING: return kingLegalMoveGenerator;
+            case PAWN: return pawnLegalMoveGenerator;
+            case ROOK: return rookLegalMoveGenerator;
+            case QUEEN: return queenLegalMoveGenerator;
+            case BISHOP: return bishopLegalMoveGenerator;
+            case KNIGHT: return knightLegalMoveGenerator;
             default: throw new IllegalArgumentException("invalid pieceType");
         }
     }
@@ -48,8 +67,12 @@ public class LegalMoveGenerator {
         return (newFile >=1 && newFile <=8) && (newRank >=1 && newRank <=8);
     }
 
-    public static boolean putsSelfInCheck(Move move, Board board){
+    public static boolean putsSelfInCheck(Move move, Board board, PieceColor pieceColor){
+        Board boardAfter = moveExecutor.executeMove(move, board);
+        List<Move> opponentResponses = generateLegalMovesFor(board, pieceColor);
         return false;
-        //TODO write this
+    }
+    public static boolean isCheck(Move move, Board Board, PieceColor pieceColor){
+        return false;
     }
 }

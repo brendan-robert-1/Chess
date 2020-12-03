@@ -56,7 +56,7 @@ public class QueenLegalMoveGenerator implements LegalMoveGeneratorInterface {
         offsets.add(new Offset(0,1));
         offsets.add(new Offset(0,-1));
         offsets.add(new Offset(-1,0));
-        offsets.add(new Offset(-1,-0));
+        offsets.add(new Offset(1,0));
         return offsets;
     }
 }

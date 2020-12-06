@@ -1,16 +1,18 @@
 package chess.engine;
 
 
-import chess.engine.legalmoves.LegalMoveGenerator;
+import chess.engine.exception.IllegalMoveException;
+import chess.engine.pgn.PGNCoordinateFinder;
 import chess.engine.pgn.PGNGame;
 import chess.model.*;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +60,7 @@ public class BoardGenerator {
 
         map.put(new Coordinate( BoardFile.e,1), new Piece(PieceColor.WHITE, PieceType.KING));
         map.put(new Coordinate( BoardFile.e,8), new Piece(PieceColor.BLACK, PieceType.KING));
-        board.setPieceMap(map);
+        board.setPieceMap(ImmutableMap.<Coordinate, Piece>builder().putAll(map).build());
         return board;
     }
 
@@ -70,11 +72,14 @@ public class BoardGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new GsonBuilder().create().fromJson(json, Board.class);
+        Type type = new TypeToken<Map<Coordinate, Piece>>(){}.getType();
+        Map<Coordinate, Piece> map = new GsonBuilder().create().fromJson(json, type);
+        return new Board(ImmutableMap.<Coordinate, Piece>builder().putAll(map).build());
     }
 
     public Board generateBoardFromPGN(String pgnFile){
         InputStream is = getClass().getClassLoader().getResourceAsStream(pgnFile);
+        PGNCoordinateFinder coordinateFinder = new PGNCoordinateFinder();
         String pgn = "";
         try {
             pgn = IOUtils.toString(is, Charset.defaultCharset());
@@ -93,25 +98,35 @@ public class BoardGenerator {
                 moveNumber++;
             }
             if(pgnMove.equals("O-O") ){
-                board = moveExecutor.castleShort(pieceColor, board);
+                try{
+                    board = moveExecutor.castleShort(pieceColor, board);
+                }catch(RuntimeException e){
+                    System.err.print("Can not castle as pieces have moved");
+                    e.printStackTrace();
+                }
             }
             else if(pgnMove.equals("O-O-O")){
-                board = moveExecutor.castleLong(pieceColor, board);
+                try{
+                    board = moveExecutor.castleLong(pieceColor, board);
+                }catch(RuntimeException e){
+                    System.err.print("Can not castle as pieces have moved");
+                    e.printStackTrace();
+                };
             } else if(gameOver(pgnMove)){
                 printEndGame(pgnMove);
                 break;
             } else {
-                PieceType pieceType = determinePieceType(pgnMove);
+                PieceType pieceType = coordinateFinder.determinePieceType(pgnMove);
                 Piece pieceToMove = new Piece(pieceColor, pieceType);
-                Coordinate endingCoordinate = determineEndingCoordinate(pgnMove, board);
-                Coordinate startingCoordinate = determineStartingCoordinate(pgnMove, pieceToMove, endingCoordinate, board);
+                Coordinate endingCoordinate = coordinateFinder.determineEndingCoordinate(pgnMove);
+                Coordinate startingCoordinate = coordinateFinder.determineStartingCoordinateOfPgnMove(pgnMove, pieceToMove, endingCoordinate, board);
                 Move move = new Move(startingCoordinate, endingCoordinate);
                 board = moveExecutor.executeMove(move, board);
             }
 
 
             System.out.println("Move: " + moveNumber + " " + pieceColor + " " + pgnMove);
-            ConsolePrinter.prettyPrintBoard(board);
+            ConsolePrinter.prettyPrintBoard(board, PieceColor.WHITE);
             pieceColor = PieceColor.opposite(pieceColor);
         }
         return board;
@@ -139,117 +154,6 @@ public class BoardGenerator {
         return false;
     }
 
-
-
-    private Coordinate determineEndingCoordinate(String pgnMove, Board board) {
-        String strippedPgnMove = stripPgnMove(pgnMove);
-        String substring = strippedPgnMove.substring(Math.max(strippedPgnMove.length() - 2, 0));
-        int rank = Integer.parseInt(String.valueOf(substring.charAt(1)));
-        BoardFile file = BoardFile.boardFile(String.valueOf(substring.charAt(0)));
-        return new Coordinate(file, rank);
-    }
-
-
-
-    private Coordinate determineStartingCoordinate(String pgnMove, Piece piece, Coordinate endingCoordinate, Board board) {
-        String strippedPgnMove = stripPgnMove(pgnMove);
-        Coordinate startingCoordinate = null;
-        Map<Coordinate, Piece> pieceMap = board.getPieceMap();
-        for(Coordinate coordinate : pieceMap.keySet()){
-            Piece currentPiece = pieceMap.get(coordinate);
-            String ambiguousChar = "";
-            int ambiguousRank = 0;
-            boolean isAmbiguousMove  = isAmbiguousMove(strippedPgnMove);
-            boolean isDoubleAmbiguous = false;
-            if(isAmbiguousMove){
-                if(pgnMove.length() == 5){
-                    ambiguousChar = String.valueOf(strippedPgnMove.charAt(1));
-                    ambiguousRank = Integer.valueOf(strippedPgnMove.charAt(2));
-                    isDoubleAmbiguous = true;
-                }else {
-                    ambiguousChar = String.valueOf(strippedPgnMove.charAt(1));
-                    if(StringUtils.isNumeric(ambiguousChar)){
-                        ambiguousRank = Integer.valueOf(ambiguousChar);
-                    }
-                }
-
-            }
-            boolean isFriendlyPiece = currentPiece.getPieceType().equals(piece.getPieceType()) && currentPiece.getPieceColor().equals(piece.getPieceColor());
-            boolean isStartingPiece = false;
-            if(isFriendlyPiece){
-                if(isAmbiguousMove){
-                    if(isDoubleAmbiguous){
-                       if(BoardFile.boardFile(ambiguousChar).equals(coordinate.getFile()) && ambiguousRank == coordinate.getRank()){
-                            isStartingPiece = true;
-                       }
-                    }else{
-                        if(ambiguousRank == 0){
-                            if(BoardFile.boardFile(ambiguousChar).equals(coordinate.getFile())){
-                                isStartingPiece = true;
-                            }
-                        }else{
-                            if(ambiguousRank == coordinate.getRank()){
-                                isStartingPiece = true;
-                            }
-                        }
-                    }
-                }else{
-                    isStartingPiece = true;
-                }
-            }
-            if(isStartingPiece){
-                if (LegalMoveGenerator.isLegalMove(new Move(coordinate, endingCoordinate), board)) {
-                    startingCoordinate = coordinate;
-                    break;
-                }
-            }
-        }
-        if(startingCoordinate == null){
-            throw new RuntimeException("Could not determine starting coordinate");
-        }
-        return startingCoordinate;
-    }
-
-
-
-    private boolean isAmbiguousMove(String pgnMove) {
-        if(pgnMove.length() == 4){
-            if(pgnMove.length() == 4){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String stripPgnMove(String pgnMove){
-        String tempString = pgnMove;
-        tempString = tempString.replace("x", "");
-        tempString = tempString.replace("+", "");
-        tempString = tempString.replace("#", "");
-        return tempString;
-    }
-
-
-
-    private PieceType determinePieceType(String pgnMove) {
-        String firstChar = String.valueOf(pgnMove.charAt(0));
-        if(firstChar.equals("B")){
-            return PieceType.BISHOP;
-        }
-        if(firstChar.equals("Q")){
-            return PieceType.QUEEN;
-        }
-        if(firstChar.equals("K")){
-            return PieceType.KING;
-        }
-        if(firstChar.equals("R")){
-            return PieceType.ROOK;
-        }
-        if(firstChar.equals("N")){
-            return PieceType.KNIGHT;
-        }
-        return PieceType.PAWN;
-    }
 
 
 

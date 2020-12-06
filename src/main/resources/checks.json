@@ -1,0 +1,59 @@
+[
+    [
+      {
+        "rank": 8,
+        "file": "b"
+      },
+      {
+        "pieceColor": "WHITE",
+        "pieceType": "KING"
+      }
+    ],
+  [
+    {
+      "rank": 1,
+      "file": "g"
+    },
+    {
+      "pieceColor": "BLACK",
+      "pieceType": "KING"
+    }
+  ],
+    [
+      {
+        "rank": 5,
+        "file": "f"
+      },
+      {
+        "pieceColor": "BLACK",
+        "pieceType": "PAWN",
+        "hasMoved": true
+      }
+    ],
+  [
+    {
+      "rank": 6,
+      "file": "g"
+    },
+    {
+      "pieceColor": "WHITE",
+      "pieceType": "PAWN",
+      "hasMoved": true
+    }
+  ],
+  [
+    {
+      "rank": 6,
+      "file": "a"
+    },
+    {
+      "pieceColor": "BLACK",
+      "pieceType": "ROOK"
+    }
+  ]
+
+  ]
+
+
+
+

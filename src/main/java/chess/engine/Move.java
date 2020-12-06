@@ -5,10 +5,12 @@ import chess.model.PieceType;
 
 import java.util.Objects;
 
-public class Move{
+public class Move {
     public Coordinate startingCoordinate;
     public Coordinate endingCoordinate;
     public PieceType pawnPromotionTo;
+    public boolean isCastleShort;
+    public boolean isCastleLong;
 
     public Move(Coordinate startingCoordinate, Coordinate endingCoordinate){
         this.startingCoordinate = startingCoordinate;
@@ -21,6 +23,18 @@ public class Move{
         this.pawnPromotionTo = pawnPromotionTo;
     }
 
+    public Move(Coordinate startingCoordinate, Coordinate endingCoordinate, PieceType pawnPromotionTo, boolean isCastleShort, boolean isCastleLong){
+        this.startingCoordinate = startingCoordinate;
+        this.endingCoordinate = endingCoordinate;
+        this.pawnPromotionTo = pawnPromotionTo;
+        this.isCastleShort = isCastleShort;
+        this.isCastleLong = isCastleLong;
+    }
+
+    @Override
+    public String toString(){
+        return startingCoordinate + " " + endingCoordinate;
+    }
 
 
     @Override

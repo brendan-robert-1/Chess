@@ -39,7 +39,7 @@ public class PawnLegalMoveGenerator implements LegalMoveGeneratorInterface {
         List<Move> moveTwo = new ArrayList<>();
         Piece pieceToMove = board.getPieceMap().get(startingCoordinate);
         Coordinate endingCoordinate = moveTwoEndingCoordinate(pieceToMove.getPieceColor(), startingCoordinate);
-        if(noPiecesInPath(startingCoordinate, endingCoordinate, board)){
+        if(noPiecesInPath(startingCoordinate, endingCoordinate, board) && pieceToMove.hasMoved() == false){
             moveTwo.add(new Move(startingCoordinate, endingCoordinate));
         }
         return moveTwo;
@@ -54,13 +54,13 @@ public class PawnLegalMoveGenerator implements LegalMoveGeneratorInterface {
         Coordinate rightCapture = getRightCaptureCoordinate(board, startingCoordinate);
         if(leftCapture != null){
             Move leftCaptureMove  = new Move(startingCoordinate, leftCapture);
-            if(!LegalMoveGenerator.putsSelfInCheck(leftCaptureMove, board, pieceColor) && capturablePiece(leftCapture, board, PieceColor.opposite(pieceColor))){
+            if(capturablePiece(leftCapture, board, PieceColor.opposite(pieceColor))){
                 captures.add(leftCaptureMove);
             }
         }
         if(rightCapture != null){
             Move rightCaptureMove  = new Move(startingCoordinate, rightCapture);
-            if(!LegalMoveGenerator.putsSelfInCheck(rightCaptureMove, board, pieceColor) && capturablePiece(rightCapture, board, PieceColor.opposite(pieceColor))){
+            if(capturablePiece(rightCapture, board, PieceColor.opposite(pieceColor))){
                 captures.add(rightCaptureMove);
             }
         }

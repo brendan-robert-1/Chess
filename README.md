@@ -1,4 +1,4 @@
-#Chess AI
+# Chess AI
 
 console chess ai that generates moves using minimax (with alpha/beta pruning)
 
